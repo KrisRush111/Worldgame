@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1, minimum-scale=1">
+    <title>Магазин</title>
+    <style>
+        body {
+            background-color: rgb(0, 0, 0); /* Черный фон */
+            min-height: 100vh; /* Минимальная высота на всю высоту окна */
+            display: flex; /* Используем flexbox для центрирования */
+            flex-direction: column; /* Упорядочиваем элементы по вертикали */
+            justify-content: flex-start; /* Элементы идут сверху */
+            align-items: center; /* Центрирование по горизонтали */
+            color: white; /* Цвет текста */
+            font-size: 15px; /* Уменьшаем размер шрифта */
+            overflow-y: auto; /* Вертикальная прокрутка */
+            overflow-x: hidden; /* Отключаем горизонтальную прокрутку */
+            user-select: none; /* Запрет на выделение текста */
+            position: relative; /* Для правильного отображения псевдоэлементов */
+            overflow: hidden; /* Предотвращаем прокрутку */
+        }
+
+        #crystalsCount, #keysCount {
+            font-size: 20px;
+            letter-spacing: 1.2px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 2;
+        }
+
+        #keysCount {
+            top: 60px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Центрирование кнопок по горизонтали */
+            gap: 20px;
+            margin-top: 100px;
+        }
+
+        .shop-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Центрирование по горизонтали */
+        }
+
+        .shop-button {
+            width: 80px;
+            height: 80px;
+            background-color: transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            overflow: hidden;
+            border: none;
+        }
+
+        .shop-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-description {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .buy-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; /* Центрирование текста и иконки в кнопке */
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .buy-button img {
+            width: 24px;
+            vertical-align: middle;
+        }
+
+        .buy-button span {
+            margin-left: 10px;
+        }
+
+        /* Контейнер для новых кнопок */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-around;
+            position: absolute;
+            bottom: 20px;
+            width: 80px; /* Устанавливаем квадратную ширину */
+            height: 80px; /* Высота такая же, как ширина */
+            padding: 0 20px; /* Отступы по бокам */
+        }
+
+        .nav-button {
+            flex: 1;
+            margin: 0 10px; /* Отступ между кнопками */
+            height: 50px; /* Высота кнопок */
+            background-color: white; /* Белый фон кнопок */
+            border: 2px solid white; /* Белая рамка */
+            border-radius: 10px; /* Закругленные углы */
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s; /* Плавные переходы */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-button img {
+            width: 50px; /* Размер изображений внутри кнопок */
+            height: 50px;
+        }
+
+        .nav-button:hover {
+            background-color: lightgray; /* Серый фон при наведении */
+        }
+
+        .nav-button span {
+            color: black; /* Черный текст */
+        }
+
+        /* Стиль для кнопки сброса */
+        .reset-button, .add-crystals-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff4d4d; /* Красный фон */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .reset-button:hover, .add-crystals-button:hover {
+            background-color: #ff1a1a; /* Темнее при наведении */
+        }
+
+    </style>
+</head>
+<body>
+    <div id="purchase-message"></div>
+
+    <div id="crystalsCount">кристаллов: <span id="totalCrystals">0</span></div>
+    <div id="keysCount">ключей: <span id="totalKeys">0</span></div>
+
+    <div class="button-container">
+        <!-- Скины -->
+        <div class="shop-item">
+            <div class="shop-button"><img src="yellow_skin.png" alt="Желтый скин"></div>
+            <div class="item-description">Желтый (500 кристаллов)</div>
+            <button class="buy-button">
+                <img src="5.png" alt="Кристаллы">
+                <span>500</span>
+            </button>
+        </div>
+
+        <div class="shop-item">
+            <div class="shop-button"><img src="white_skin.png" alt="Белый скин"></div>
+            <div class="item-description">Белый (2000 кристаллов)</div>
+            <button class="buy-button">
+                <img src="5.png" alt="Кристаллы">
+                <span>2000</span>
+            </button>
+        </div>
+
+        <!-- Ключи -->
+        <div class="shop-item">
+            <div class="shop-button"><img src="key.png" alt="Товар 1"></div>
+            <div class="item-description">10</div>
+            <button class="buy-button">
+                <img src="5.png" alt="Кристаллы">
+                <span>1500</span>
+            </button>
+        </div>
+
+        <div class="shop-item">
+            <div class="shop-button"><img src="key.png" alt="Товар 2"></div>
+            <div class="item-description">50</div>
+            <button class="buy-button">
+                <img src="5.png" alt="Кристаллы">
+                <span>3200</span>
+            </button>
+        </div>
+
+        <div class="shop-item">
+            <div class="shop-button"><img src="key.png" alt="Товар 3"></div>
+            <div class="item-description">100</div>
+            <button class="buy-button">
+                <img src="5.png" alt="Кристаллы">
+                <span>10000</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Звезды -->
+    <div class="stars">
+        <!-- Звезды остаются как в вашем исходном коде -->
+    </div>
+
+    <!-- Контейнер для кнопок навигации -->
+    <div class="nav-buttons">
+        <button class="nav-button" onclick="location.href='kliker.html'">
+            <img src="3.png" alt="Кликер" style="height: 100%;">
+        </button>
+        <button class="nav-button" onclick="location.href='menu.html'">
+            <img src="m.png" alt="Домой" style="height: 100%;">
+        </button>
+    </div>
+
+    <!-- Кнопка сброса игры и добавления кристаллов -->
+    <button class="reset-button" onclick="resetGame()">Сбросить игру</button>
+    <button class="add-crystals-button" onclick="addCrystals()">Добавить 100000 кристаллов</button>
+
+    <script>
+        if (performance.navigation.type === 1) {
+            window.location.href = 'index.html';
+        }
+
+        // Получаем текущие значения кристаллов и ключей
+        let totalCrystals = localStorage.getItem('totalCrystals') || 0;
+        let totalKeys = localStorage.getItem('totalKeys') || 0;
+        document.getElementById('totalCrystals').textContent = totalCrystals;
+        document.getElementById('totalKeys').textContent = totalKeys;
+
+        // Функция для отображения сообщения
+        function showPurchaseMessage(message) {
+            const purchaseMessage = document.getElementById('purchase-message');
+            purchaseMessage.textContent = message;
+            purchaseMessage.style.visibility = 'visible';
+            purchaseMessage.style.opacity = '1';
+
+            // Скрываем сообщение через 2 секунды
+            setTimeout(() => {
+                purchaseMessage.style.opacity = '0';
+                purchaseMessage.style.visibility = 'hidden';
+            }, 2000);
+        }
+
+        // Добавляем обработчики для покупки товаров
+        document.querySelectorAll('.buy-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const cost = parseInt(this.querySelector('span').textContent.replace('.', ''));
+                const keys = parseInt(this.previousElementSibling.textContent);
+                let totalCrystals = parseInt(localStorage.getItem('totalCrystals') || '0');
+                let totalKeys = parseInt(localStorage.getItem('totalKeys') || '0');
+
+                if (totalCrystals >= cost) {
+                    totalCrystals -= cost;
+                    localStorage.setItem('totalCrystals', totalCrystals);
+                    document.getElementById('totalCrystals').textContent = totalCrystals;
+                    if (keys > 0) {
+                        totalKeys += keys;
+                        localStorage.setItem('totalKeys', totalKeys);
+                        document.getElementById('totalKeys').textContent = totalKeys;
+                    }
+                    showPurchaseMessage(`Вы купили товар за ${cost} кристаллов.`);
+                } else {
+                    showPurchaseMessage('Недостаточно кристаллов для покупки.');
+                }
+            });
+        });
+
+        // Функция сброса игры
+        function resetGame() {
+            localStorage.removeItem('totalCrystals');
+            localStorage.removeItem('totalKeys');
+            document.getElementById('totalCrystals').textContent = '0';
+            document.getElementById('totalKeys').textContent = '0';
+            showPurchaseMessage('Игра сброшена.');
+        }
+
+        // Функция для добавления 100000 кристаллов
+        function addCrystals() {
+            let totalCrystals = parseInt(localStorage.getItem('totalCrystals') || '0');
+            totalCrystals += 100000;
+            localStorage.setItem('totalCrystals', totalCrystals);
+            document.getElementById('totalCrystals').textContent = totalCrystals;
+            showPurchaseMessage('Добавлено 100000 кристаллов.');
+        }
+    </script>
+</body>
+</html>
